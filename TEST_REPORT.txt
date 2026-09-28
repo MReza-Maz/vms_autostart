@@ -1,0 +1,53 @@
+vms_autostart 2.0 - Validation Report (post-fix)
+===============================================
+
+Platform target:
+  Ubuntu 24.04 LTS
+
+Bug fixed (production log 2026-09-27):
+  SOAP RetrievePropertiesEx sent invalid PropertyFilterSpec XML
+  (intermediate PropertyFilterSpec/PropertySpec/ObjectSpec wrappers
+  plus missing required "options" element). Real vCenter returned:
+  HTTP 500 - "Required property propSet is missing from data object
+  of type PropertyFilterSpec".
+
+  Fix: serialize propSet/objectSet as direct children of specSet and
+  include empty <options/>, matching vim25 SOAP encoding rules.
+
+Application tests:
+  15/15 passed
+
+Covered areas:
+  - REST session HTTP 201 with JSON string response
+  - REST session HTTP 200 with JSON object response
+  - Invalid REST session response handling
+  - Real local HTTPS REST request/response flow
+  - vmware-api-session-id header propagation
+  - VM lookup through REST name filter
+  - VM power-state read
+  - PowerOn HTTP 204 handling
+  - ESXi connection-state normalization
+  - First-run baseline protection
+  - ESXi disconnected/notResponding -> connected trigger
+  - No duplicate trigger on connected -> connected
+  - Non-zero failure reporting when a VM operation fails
+  - Real local HTTPS SOAP session/snapshot/task/remove flow
+  - Snapshot XML escaping
+  - Snapshot task-state parsing
+  - Snapshot retention selection
+  - vCenter timestamp parsing
+  - RetrievePropertiesEx XML structure (no forbidden wrappers, options present)
+
+Static validation:
+  - Python AST parse: passed
+  - Python bytecode compilation: passed
+  - Bash syntax for installer.sh: passed
+  - Bash syntax for run.sh: passed
+  - JSON parsing: passed
+  - No pyVmomi import/dependency: passed
+
+Limitation:
+  A live ESXi/vCenter production server was not available in this
+  execution environment; the SOAP XML fix was validated against the
+  exact fault string returned by the production vCenter and against
+  the official vim25 serialization rules.

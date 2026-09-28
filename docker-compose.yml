@@ -1,0 +1,21 @@
+services:
+  vms-autostart:
+    image: vms_autostart:2.1
+    restart: "no"
+    working_dir: /app
+    environment:
+      # Use host local timezone so logs and snapshot names show local wall time.
+      # Override if needed, e.g. TZ=Asia/Tehran
+      - TZ=${TZ:-Asia/Tehran}
+    volumes:
+      - ./vms_autostart.py:/app/vms_autostart.py:ro
+      - ./config.json:/app/config.json:ro
+      - ./state:/app/state
+      - /var/log/vms_autostart:/var/log/vms_autostart
+      - /etc/localtime:/etc/localtime:ro
+    secrets:
+      - vcenter_password
+
+secrets:
+  vcenter_password:
+    file: ./vcenter.pass

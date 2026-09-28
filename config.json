@@ -1,0 +1,36 @@
+{
+  "vcenter": {
+    "host": "192.168.1.10",
+    "port": 443,
+    "username": "administrator@vsphere.local",
+    "password_file": "/run/secrets/vcenter_password",
+    "ignore_ssl": true,
+    "http_timeout": 20,
+    "http_retries": 2,
+    "soap_timeout": 30,
+    "soap_retries": 2
+  },
+  "startup": {
+    "enabled": true,
+    "hosts": [],
+    "vms": ["VM01", "VM03", "VM04"],
+    "state_file": "/app/state/startup.json",
+    "task_timeout": 300,
+    "trigger_on_first_run": false
+  },
+  "snapshots": {
+    "enabled": true,
+    "vms": ["VM01", "VM03", "VM04"],
+    "name_prefix": "auto-backup",
+    "description": "Automatic snapshot created by vms_autostart",
+    "memory": false,
+    "quiesce": false,
+    "wait_for_task": true,
+    "task_timeout": 600,
+    "retention_count": 4
+  },
+  "logging": {
+    "log_file": "/var/log/vms_autostart/vms_autostart.log",
+    "level": "INFO"
+  }
+}
